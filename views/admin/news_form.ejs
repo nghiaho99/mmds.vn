@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<%- include('../partials/head') %>
+
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="container mt-5 mb-5">
+    <h1><%= typeof article === 'undefined' ? 'Thêm bài viết mới' : 'Sửa bài viết' %></h1>
+
+    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+      <div class="alert alert-danger" role="alert">
+        <% if (errorMessage === 'duplicate_link') { %>
+          Lỗi: Đường dẫn bài viết đã tồn tại. Vui lòng chọn đường dẫn khác.
+        <% } else if (errorMessage === 'article_not_found') { %>
+          Lỗi: Không tìm thấy bài viết.
+        <% } else { %>
+          <%= errorMessage %>
+        <% } %>
+      </div>
+    <% } %>
+
+    <form action="<%= typeof article === 'undefined' ? '/admin/news/new' : '/admin/news/edit/' + article.id %>" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="mb-3">
+        <label for="title" class="form-label">Tiêu đề</label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= typeof article !== 'undefined' ? article.title : '' %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="imageSrc" class="form-label">Đường dẫn ảnh</label>
+        <input type="text" class="form-control" id="imageSrc" name="imageSrc" value="<%= typeof article !== 'undefined' ? article.imageSrc : '' %>" required>
+        <small class="form-text text-muted">
+          Lưu ảnh vào thư mục `public/images` và nhập đường dẫn có dạng `/images/ten-anh.jpg`.
+        </small>
+      </div>
+      <div class="mb-3">
+        <label for="articleLink" class="form-label">Link bài viết</label>
+        <input type="text" class="form-control" id="articleLink" name="articleLink" value="<%= typeof article !== 'undefined' ? article.articleLink : '' %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="altText" class="form-label">Văn bản thay thế (alt text)</label>
+        <input type="text" class="form-control" id="altText" name="altText" value="<%= typeof article !== 'undefined' ? article.altText : '' %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="author" class="form-label">Tác giả</label>
+        <input type="text" class="form-control" id="author" name="author" value="<%= typeof article !== 'undefined' && article.author ? article.author : '' %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">Nội dung bài viết</label>
+        <textarea class="form-control tinymce-editor" id="content" name="content" rows="10"><%= typeof article !== 'undefined' ? article.content : '' %></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Lưu bài viết</button>
+      <a href="/admin/news" class="btn btn-secondary">Hủy</a>
+    </form>
+  </main>
+
+  <script>
+    function slugify(text) {
+      if (!text) return '';
+      text = text.toString().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Handle 'đ' and remove other diacritics
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w-]+/g, '')       // Remove all non-word chars
+        .replace(/--+/g, '-');          // Replace multiple - with single -
+      return text;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const titleInput = document.getElementById('title');
+      const articleLinkInput = document.getElementById('articleLink');
+
+      if (titleInput && articleLinkInput) {
+        titleInput.addEventListener('input', () => {
+          articleLinkInput.value = slugify(titleInput.value);
+        });
+      }
+    });
+  </script>
+  
+  <script src="/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      api_key: 'shnx3cp9x87z67iowj8rkq5ogrhxl2p7r0ylsarmu0pqy30s', // Khóa API của bạn
+      selector: '#content',
+      plugins: [
+        'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'table', 'wordcount', 'code', 'autoresize'
+      ],
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | numlist bullist | align lineheight | emoticons charmap | code removeformat',
+      autoresize_bottom_margin: 20,
+      height: 400,
+      images_upload_url: '/admin/upload-image', // Endpoint để xử lý upload hình ảnh
+      images_upload_base_path: '/images/uploads', // Base path cho hình ảnh đã upload
+      file_picker_types: 'image', // Cho phép chọn file hình ảnh
+      file_picker_callback: function (cb, value, meta) {
+        var input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.onchange = function () {
+          var file = this.files[0];
+          var reader = new FileReader();
+          reader.onload = function () {
+            var id = 'blobid' + (new Date()).getTime();
+            var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+            var base64 = reader.result.split(',')[1];
+            var blobInfo = blobCache.create(id, file, base64);
+            blobCache.add(blobInfo);
+            cb(blobInfo.blobUri(), { title: file.name });
+          };
+          reader.readAsDataURL(file);
+        };
+        input.click();
+      }
+    });
+  </script>
+
+  <%- include('../partials/footer') %>
+</body>
+
+</html>

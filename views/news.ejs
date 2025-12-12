@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head') %>
+
+<body>
+    <%- include('partials/header') %>
+
+    <section class="section section-news">
+        <div class="container">
+            <h1 class="page-title">TIN TỨC</h1>
+            <div class="news-list">
+                <% newsArticles.forEach(function(article) { %>
+                <div class="news-list-item">
+                    <a href="/tin-tuc/<%= article.articleLink %>" class="news-list-item-image">
+                        <img src="<%= article.imageSrc && article.imageSrc !== '' ? article.imageSrc : '/images/placeholder.jpg' %>" alt="<%= article.altText %>" width="300" height="200">
+                        <!-- TODO: Replace width and height with actual image dimensions from backend for optimal CLS -->
+                    </a>
+                    <div class="news-list-item-content">
+                        <h2 class="news-list-item-title"><a href="/tin-tuc/<%= article.articleLink %>"><%= article.title %></a></h2>
+                        <p class="news-list-item-meta">
+                            <span><i class="fa-solid fa-user"></i> Tác giả: <%= article.author %></span>
+                            <span><i class="fa-solid fa-calendar-days"></i> Đăng ngày: <%= formatDate(article.createdAt) %></span>
+                        </p>
+                        <a href="/tin-tuc/<%= article.articleLink %>" class="btn btn-primary news-readmore-btn">Xem thêm</a>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

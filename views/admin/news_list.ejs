@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<%- include('../partials/head') %>
+
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Quản lý tin tức</h1>
+      <a href="/admin/news/new" class="btn btn-primary">Thêm bài viết mới</a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Tiêu đề</th>
+          <th scope="col" style="width: 15%;">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% articles.forEach(article => { %>
+        <tr>
+          <th scope="row"><%= article.id %></th>
+          <td><%= article.title %></td>
+          <td>
+            <a href="/admin/news/edit/<%= article.id %>" class="btn btn-sm btn-warning">Sửa</a>
+            <a href="/admin/news/delete/<%= article.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">Xóa</a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+
+</html>

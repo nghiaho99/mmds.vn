@@ -1,0 +1,35 @@
+const express = require('express');
+const router = express.Router();
+const fs = require('fs');
+const path = require('path');
+
+const dataPath = path.join(__dirname, '..', 'news_data.json');
+
+// Helper function to format date
+function formatDate(isoString) {
+  if (!isoString) return 'Chưa có thông tin';
+  const date = new Date(isoString);
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleDateString('vi-VN', options);
+}
+
+// Route cho trang tin tức (liệt kê tất cả)
+router.get('/', (req, res) => {
+  const newsArticles = JSON.parse(fs.readFileSync(dataPath, 'utf-8')).sort((a, b) => b.id - a.id);
+  res.render('news', { newsArticles, formatDate: formatDate });
+});
+
+// Route cho trang chi tiết tin tức
+router.get('/:articleLink', (req, res) => {
+  const articles = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  const article = articles.find(a => a.articleLink === req.params.articleLink);
+
+  if (article) {
+    res.render('news_detail', { article, formatDate: formatDate }); // Truyền hàm formatDate vào template
+  } else {
+    // If article not found, redirect to the news list page
+    res.redirect('/'); // Redirects to /tin-tuc because this router is mounted at /tin-tuc
+  }
+});
+
+module.exports = router;

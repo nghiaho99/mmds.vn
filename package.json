@@ -1,0 +1,28 @@
+{
+  "name": "nodejs_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "csurf": "^1.11.0",
+    "dompurify": "^3.3.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "he": "^1.2.0",
+    "helmet": "^8.1.0",
+    "jsdom": "^27.2.0",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.11",
+    "tinymce": "^6.8.6"
+  }
+}
