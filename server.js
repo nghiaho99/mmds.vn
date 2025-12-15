@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -61,6 +62,54 @@ app.use((req, res, next) => {
     res.locals.csrfToken = req.csrfToken();
     next();
 });
+
+// SEO Middleware
+const seoDataPath = path.join(__dirname, 'seo-data.json');
+const newsDataPathForSeo = path.join(__dirname, 'news_data.json');
+
+app.use((req, res, next) => {
+    // Skip SEO middleware for admin routes
+    if (req.path.startsWith('/admin')) {
+        return next();
+    }
+
+    try {
+        const seoData = JSON.parse(fs.readFileSync(seoDataPath, 'utf8'));
+        const defaultSeo = {
+            title: 'MMDS.VN - Dịch vụ chất lượng',
+            description: 'Chúng tôi cung cấp các dịch vụ tốt nhất.'
+        };
+
+        let pageSeo = seoData.routes.find(r => r.path === req.path);
+
+        // Handle dynamic news articles
+        if (!pageSeo && req.path.startsWith('/tin-tuc/')) {
+            const articleLink = req.path.split('/')[2];
+            const newsTemplate = seoData.routes.find(r => r.path === '/tin-tuc/:articleLink');
+            if (newsTemplate) {
+                const newsData = JSON.parse(fs.readFileSync(newsDataPathForSeo, 'utf8'));
+                const article = newsData.find(a => a.articleLink === articleLink);
+                if (article) {
+                    // Create a copy to avoid modifying the cached template
+                    pageSeo = JSON.parse(JSON.stringify(newsTemplate));
+                    pageSeo.title = pageSeo.title.replace('{{TEN_BAI_VIET}}', article.title);
+                    pageSeo.description = pageSeo.description.replace('{{TEN_BAI_VIET}}', article.title);
+                }
+            }
+        }
+        
+        res.locals.seo = pageSeo || defaultSeo;
+
+    } catch (error) {
+        console.error('Error reading SEO data:', error);
+        res.locals.seo = {
+            title: 'MMDS.VN',
+            description: 'Lỗi tải dữ liệu SEO.'
+        };
+    }
+    next();
+});
+
 
 // Sử dụng các routes đã được tách ra
 app.use('/', pageRoutes);

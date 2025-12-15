@@ -1,5 +1,15 @@
 const express = require('express');
 const router = express.Router();
+
+// Provide a default SEO object for all admin routes to prevent template errors
+router.use((req, res, next) => {
+    res.locals.seo = {
+        title: 'Admin - MMDS.VN',
+        description: 'Khu vực quản trị website.'
+    };
+    next();
+});
+
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
@@ -71,6 +81,60 @@ const writeData = (data) => {
 
 // Apply authentication middleware to all routes below this point
 router.use(isAuthenticated);
+
+// --- SEO MANAGEMENT ROUTES ---
+const seoDataPath = path.join(__dirname, '..', 'seo-data.json');
+
+// Helper function to read SEO data
+const readSeoData = () => {
+    try {
+        const jsonData = fs.readFileSync(seoDataPath);
+        return JSON.parse(jsonData);
+    } catch (error) {
+        // If file doesn't exist or is invalid, return a default structure
+        return { routes: [] };
+    }
+};
+
+// Helper function to write SEO data
+const writeSeoData = (data) => {
+    fs.writeFileSync(seoDataPath, JSON.stringify(data, null, 2));
+};
+
+// Route to show the SEO management page
+router.get('/seo', (req, res) => {
+    const seoData = readSeoData();
+    const successMessage = req.session.successMessage;
+    req.session.successMessage = null; // Clear message after displaying
+    res.render('admin/seo', { 
+        routes: seoData.routes, 
+        successMessage: successMessage,
+        csrfToken: req.csrfToken() // Pass CSRF token to the view
+    });
+});
+
+// Route to handle updating SEO data
+router.post('/seo', (req, res) => {
+    const seoData = readSeoData();
+    
+    // Update the data based on form submission
+    seoData.routes.forEach(route => {
+        const titleKey = `${route.path}_title`;
+        const descriptionKey = `${route.path}_description`;
+        if (req.body[titleKey]) {
+            route.title = req.body[titleKey];
+        }
+        if (req.body[descriptionKey]) {
+            route.description = req.body[descriptionKey];
+        }
+    });
+
+    writeSeoData(seoData);
+    
+    req.session.successMessage = 'Cập nhật SEO thành công!';
+    res.redirect('/admin/seo');
+});
+
 
 // Route để xử lý upload hình ảnh từ TinyMCE
 router.post('/upload-image', upload.single('file'), (req, res) => {

@@ -1,0 +1,34 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "name": "Trang chủ",
+      "title": "Mật mã dân sự - Tư vấn, hỗ trợ Doanh nghiệp xin giấy phép",
+      "description": "Dịch Vụ Cấp Giấy Phép Nhập Khẩu Thiết Bị Mật Mã Dân Sự (MMDS)\r\nNHANH CHÓNG - CAM KẾT THÀNH CÔNG 100%"
+    },
+    {
+      "path": "/huong-dan",
+      "name": "Hướng dẫn",
+      "title": "Mật mã dân sự - Tổng quan, hướng dẫn về mật mã dân sự",
+      "description": "Theo Luật An toàn thông tin mạng số 86/2015/QH13, mật mã dân sự là kỹ thuật và sản phẩm mật mã dùng để bảo mật hoặc xác thực thông tin không thuộc phạm vi bí mật nhà nước.\r\nĐây là các giải pháp mã hóa phục vụ nhu cầu bảo mật trong hoạt động dân sự, thương mại, cá nhân hoặc tổ chức tư nhân"
+    },
+    {
+      "path": "/cong-ty",
+      "name": "Công ty",
+      "title": "Mật mã dân sự - Về chúng tôi",
+      "description": "Công ty Cổ phần Chữ Ký Số Vi Na (SmartSign) tự hào là đơn vị tiên phong trong lĩnh vực chữ ký số, hóa đơn điện tử, phần mềm quản lý bán hàng và mật mã dân sự. Với nền tảng công nghệ hiện đại, Vi Na đã phát triển hệ thống tích hợp toàn diện với thuế, BHXH, hải quan, ngân hàng và các công ty chứng khoán, giúp tối ưu hóa mọi giao dịch điện tử."
+    },
+    {
+      "path": "/tin-tuc",
+      "name": "Danh sách tin tức",
+      "title": "Mật mã dân sự - Tin tức",
+      "description": "Tổng hợp các tin tức và bài viết mới nhất về mất mã dân sự"
+    },
+    {
+      "path": "/tin-tuc/:articleLink",
+      "name": "Chi tiết tin tức (Mẫu)",
+      "title": "{{TEN_BAI_VIET}} - MMDS.VN",
+      "description": "Đọc bài viết {{TEN_BAI_VIET}} tại MMDS.VN."
+    }
+  ]
+}

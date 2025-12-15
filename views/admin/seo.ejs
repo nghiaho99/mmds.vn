@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<%- include('../partials/head') %>
+
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Quản lý SEO</h1>
+    </div>
+
+    <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+      <div class="alert alert-success" role="alert">
+        <%= successMessage %>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/admin/seo">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <% routes.forEach(route => { %>
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4><%= route.name %></h4>
+            <small class="text-muted">Đường dẫn: <%= route.path %></small>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="<%= route.path %>_title" class="form-label">Tiêu đề SEO</label>
+              <input type="text" class="form-control" id="<%= route.path %>_title" name="<%= route.path %>_title" value="<%= route.title %>">
+            </div>
+            <div class="mb-3">
+              <label for="<%= route.path %>_description" class="form-label">Mô tả SEO</label>
+              <textarea class="form-control" id="<%= route.path %>_description" name="<%= route.path %>_description" rows="3"><%= route.description %></textarea>
+            </div>
+            <div class="mt-3">
+              <h5>Xem trước trên Google</h5>
+              <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                  <div id="preview_<%= route.path.replace(/[:/]/g, '_') %>_title" class="text-truncate" style="color: #1a0dab; font-size: 1.1rem;"><%= route.title %></div>
+                  <div class="text-truncate" style="color: #006621; font-size: 0.8rem;"><%= `https://mmds.vn${route.path.startsWith('/') ? '' : '/'}${route.path}` %></div>
+                  <div id="preview_<%= route.path.replace(/[:/]/g, '_') %>_description" class="text-muted" style="font-size: 0.9rem;"><%= route.description %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+
+      <button type="submit" class="btn btn-primary btn-lg">Lưu tất cả thay đổi</button>
+    </form>
+  </main>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      <% routes.forEach(route => { %>
+        const titleInput_<%= route.path.replace(/[:/]/g, '_') %> = document.getElementById('<%= route.path %>_title');
+        const descriptionInput_<%= route.path.replace(/[:/]/g, '_') %> = document.getElementById('<%= route.path %>_description');
+        const titlePreview_<%= route.path.replace(/[:/]/g, '_') %> = document.getElementById('preview_<%= route.path.replace(/[:/]/g, '_') %>_title');
+        const descriptionPreview_<%= route.path.replace(/[:/]/g, '_') %> = document.getElementById('preview_<%= route.path.replace(/[:/]/g, '_') %>_description');
+
+        titleInput_<%= route.path.replace(/[:/]/g, '_') %>.addEventListener('input', function() {
+          titlePreview_<%= route.path.replace(/[:/]/g, '_') %>.textContent = this.value;
+        });
+
+        descriptionInput_<%= route.path.replace(/[:/]/g, '_') %>.addEventListener('input', function() {
+          descriptionPreview_<%= route.path.replace(/[:/]/g, '_') %>.textContent = this.value;
+        });
+      <% }) %>
+    });
+  </script>
+
+  <%- include('../partials/footer') %>
+</body>
+
+</html>
