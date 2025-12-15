@@ -21,19 +21,28 @@
       </div>
     <% } %>
 
-    <form action="<%= typeof article === 'undefined' ? '/admin/news/new' : '/admin/news/edit/' + article.id %>" method="POST">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <form action="<%= typeof article === 'undefined' ? '/admin/news/new' : ('/admin/news/edit/' + article.id) %>?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data">
+      
       <div class="mb-3">
         <label for="title" class="form-label">Tiêu đề</label>
         <input type="text" class="form-control" id="title" name="title" value="<%= typeof article !== 'undefined' ? article.title : '' %>" required>
       </div>
+      
       <div class="mb-3">
-        <label for="imageSrc" class="form-label">Đường dẫn ảnh</label>
-        <input type="text" class="form-control" id="imageSrc" name="imageSrc" value="<%= typeof article !== 'undefined' ? article.imageSrc : '' %>" required>
-        <small class="form-text text-muted">
-          Lưu ảnh vào thư mục `public/images` và nhập đường dẫn có dạng `/images/ten-anh.jpg`.
-        </small>
+        <label for="articleImage" class="form-label">Ảnh đại diện</label>
+        <input type="file" class="form-control" id="articleImage" name="articleImage" accept="image/png, image/jpeg, image/gif, image/webp">
+        <small class="form-text text-muted">Tải ảnh mới lên để thay thế ảnh cũ. Ảnh sẽ được tự động chuyển sang định dạng .webp.</small>
       </div>
+
+      <div class="mb-3">
+        <label class="form-label">Xem trước ảnh đại diện</label>
+        <img id="imagePreview" 
+             src="<%= (typeof article !== 'undefined' && article.imageSrc) ? article.imageSrc : '' %>" 
+             alt="Image preview" 
+             class="img-fluid rounded" 
+             style="max-height: 200px; <%= (typeof article === 'undefined' || !article.imageSrc) ? 'display: none;' : '' %>">
+      </div>
+
       <div class="mb-3">
         <label for="articleLink" class="form-label">Link bài viết</label>
         <input type="text" class="form-control" id="articleLink" name="articleLink" value="<%= typeof article !== 'undefined' ? article.articleLink : '' %>" required>
@@ -57,24 +66,37 @@
   </main>
 
   <script>
+    // Script for slug generation
     function slugify(text) {
       if (!text) return '';
-      text = text.toString().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Handle 'đ' and remove other diacritics
+      text = text.toString().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, '-')           // Replace spaces with -
-        .replace(/[^\w-]+/g, '')       // Remove all non-word chars
-        .replace(/--+/g, '-');          // Replace multiple - with single -
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+        .replace(/--+/g, '-');
       return text;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const titleInput = document.getElementById('title');
       const articleLinkInput = document.getElementById('articleLink');
+      const articleImageInput = document.getElementById('articleImage');
+      const imagePreview = document.getElementById('imagePreview');
 
       if (titleInput && articleLinkInput) {
         titleInput.addEventListener('input', () => {
           articleLinkInput.value = slugify(titleInput.value);
+        });
+      }
+
+      if (articleImageInput && imagePreview) {
+        articleImageInput.addEventListener('change', function() {
+          const file = this.files[0];
+          if (file) {
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.style.display = 'block';
+          }
         });
       }
     });
