@@ -5,6 +5,8 @@ const path = require('path');
 
 const dataPath = path.join(__dirname, '..', 'news_data.json');
 
+const striptags = require('striptags');
+
 // Helper function to format date
 function formatDate(isoString) {
   if (!isoString) return 'Chưa có thông tin';
@@ -15,8 +17,33 @@ function formatDate(isoString) {
 
 // Route cho trang tin tức (liệt kê tất cả)
 router.get('/', (req, res) => {
-  const newsArticles = JSON.parse(fs.readFileSync(dataPath, 'utf-8')).sort((a, b) => b.id - a.id);
-  res.render('news', { newsArticles, formatDate: formatDate });
+  let allArticles = JSON.parse(fs.readFileSync(dataPath, 'utf-8')).sort((a, b) => b.id - a.id);
+  const searchQuery = req.query.search || '';
+
+  if (searchQuery) {
+    allArticles = allArticles.filter(article => {
+      const match = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    striptags(article.content).toLowerCase().includes(searchQuery.toLowerCase());
+      return match;
+    });
+  }
+  
+  const page = parseInt(req.query.page) || 1;
+  const articlesPerPage = 5;
+  const totalArticles = allArticles.length;
+  const totalPages = Math.ceil(totalArticles / articlesPerPage);
+  const startIndex = (page - 1) * articlesPerPage;
+  const endIndex = startIndex + articlesPerPage;
+  
+  const newsArticles = allArticles.slice(startIndex, endIndex);
+
+  res.render('news', { 
+    newsArticles, 
+    formatDate: formatDate,
+    currentPage: page,
+    totalPages: totalPages,
+    searchQuery: searchQuery
+  });
 });
 
 // Route cho trang chi tiết tin tức
