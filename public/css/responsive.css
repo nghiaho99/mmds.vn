@@ -1,0 +1,35 @@
+/* Responsive styles for MMDS.VN */
+
+@media (max-width: 991.98px) {
+  /* Styles for the expanded mobile menu */
+  .navbar-collapse.show,
+  .navbar-collapse.collapsing {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+  }
+
+  /* Center the nav items in mobile view */
+  .navbar-nav {
+    align-items: center;
+  }
+
+  /* Space out the header buttons in mobile view */
+  .hb_header_button {
+    justify-content: center;
+    margin-top: 15px;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* Adjust the Table of Contents for small screens */
+  .toc-light-animate {
+    position: static; /* Remove sticky positioning */
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+  }
+}
