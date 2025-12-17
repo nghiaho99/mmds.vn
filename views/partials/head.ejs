@@ -28,4 +28,47 @@
     <link rel="icon" href="/images/cropped-icon-web-192x192.jpg" sizes="192x192">
     <link rel="apple-touch-icon" href="/images/cropped-icon-web-180x180.jpg">
     <meta name="msapplication-TileImage" content="/images/cropped-icon-web-270x270.jpg">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .pagination a {
+            color: #007bff;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+        .news-search {
+            margin-bottom: 20px;
+        }
+        .news-search form {
+            display: flex;
+        }
+        .news-search input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+        }
+        .news-search button {
+            padding: 10px 20px;
+            border: 1px solid #007bff;
+            background-color: #007bff;
+            color: white;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+    </style>
 </head>
