@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mmds.vn/sitemap.xml

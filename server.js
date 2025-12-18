@@ -110,6 +110,53 @@ app.use((req, res, next) => {
     next();
 });
 
+// Sitemap Generation
+app.get('/sitemap.xml', (req, res) => {
+    const baseUrl = 'https://mmds.vn';
+    const sitemapPath = path.join(__dirname, 'seo-data.json');
+    const newsPath = path.join(__dirname, 'news_data.json');
+
+    try {
+        const sitemapData = JSON.parse(fs.readFileSync(sitemapPath, 'utf8'));
+        const newsData = JSON.parse(fs.readFileSync(newsPath, 'utf8'));
+
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        const today = new Date().toISOString().split('T')[0];
+
+        // Add static routes
+        sitemapData.routes.forEach(route => {
+            // Ignore the dynamic article template
+            if (route.path.includes(':')) return;
+
+            xml += '<url>';
+            xml += `<loc>${baseUrl}${route.path}</loc>`;
+            xml += `<lastmod>${today}</lastmod>`;
+            xml += '</url>';
+        });
+
+        // Add news articles
+        newsData.forEach(article => {
+            const articleUrl = `${baseUrl}/tin-tuc/${article.articleLink}`;
+            const lastMod = new Date(article.createdAt).toISOString().split('T')[0];
+            xml += '<url>';
+            xml += `<loc>${articleUrl}</loc>`;
+            xml += `<lastmod>${lastMod}</lastmod>`;
+            xml += '</url>';
+        });
+
+        xml += '</urlset>';
+
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+
+    } catch (error) {
+        console.error('Sitemap generation error:', error);
+        res.status(500).send('Error generating sitemap.');
+    }
+});
+
 
 // Sử dụng các routes đã được tách ra
 app.use('/', pageRoutes);
