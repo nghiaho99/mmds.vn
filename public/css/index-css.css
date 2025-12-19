@@ -15583,7 +15583,7 @@ body {
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #ffffff
+    color: #000000
 }
 
 .main-navigation .menu>li>a {
@@ -16143,7 +16143,7 @@ body {
     padding: 8px 12px;
     border-radius: 20px;
     transition: background-color 0.3s ease;
-    background-color: #FB8317
+    background-color: #FBA14B
 }
 
 .hb_header_button ._header-button:hover {
