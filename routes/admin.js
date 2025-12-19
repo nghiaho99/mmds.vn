@@ -77,7 +77,12 @@ const tinyMceUpload = multer({ storage: diskStorage });
 
 // 2. For Article Images (stores in memory for processing)
 const memoryStorage = multer.memoryStorage();
-const uploadArticleImage = multer({ storage: memoryStorage });
+const uploadArticleImage = multer({
+    storage: memoryStorage,
+    limits: {
+        fieldSize: 10 * 1024 * 1024 // 10MB
+    }
+});
 
 
 // Helper function to read data

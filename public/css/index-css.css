@@ -15901,6 +15901,7 @@ body {
 
 .card {
     background: #fff;
+    margin: 0 30px;
     padding: 32px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);

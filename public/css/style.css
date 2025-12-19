@@ -129,7 +129,7 @@
 /* --- Layout --- */
 .elegant-header {
     background: #ffffff;
-    padding: 10px 0;
+    padding: 5px 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     position: sticky;
     top: 0;
@@ -279,4 +279,9 @@
     font-size: 18px !important;
     line-height: 1 !important;
     flex-shrink: 0 !important;
+}
+
+.breadcrumb {
+  margin-left: 1rem;
+  margin-top: 1rem;
 }

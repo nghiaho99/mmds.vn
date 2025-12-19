@@ -105,9 +105,61 @@
       toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | numlist bullist | align lineheight | emoticons charmap | code removeformat',
       autoresize_bottom_margin: 20,
       height: 400,
+      fixed_toolbar_container: '#tinymce-toolbar-container', // Make toolbar fixed in this container
       images_upload_url: '/admin/upload-image', // Endpoint để xử lý upload hình ảnh
       images_upload_base_path: '/images/uploads', // Base path cho hình ảnh đã upload
       file_picker_types: 'image', // Cho phép chọn file hình ảnh
+      
+      // Add this part for CSRF token
+      images_upload_handler: function (blobInfo, progress) {
+        return new Promise((resolve, reject) => {
+          var xhr, formData;
+          xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          xhr.open('POST', '/admin/upload-image');
+
+          console.log('CSRF Token sent in XHR:', '<%= csrfToken %>');
+          xhr.setRequestHeader('X-CSRF-Token', '<%= csrfToken %>');
+
+          xhr.upload.onprogress = function (e) {
+            progress(e.loaded / e.total * 100);
+          };
+
+          xhr.onload = function() {
+            var json;
+
+            if (xhr.status === 403) {
+              reject('HTTP Error: ' + xhr.status + ' (CSRF token missing or invalid)');
+              return;
+            }
+
+            if (xhr.status < 200 || xhr.status >= 300) {
+              reject('HTTP Error: ' + xhr.status + ' ' + xhr.statusText);
+              return;
+            }
+
+            json = JSON.parse(xhr.responseText);
+
+            if (!json || typeof json.location != 'string') {
+              reject('Invalid JSON: ' + xhr.responseText);
+              return;
+            }
+
+            resolve(json.location);
+          };
+
+          xhr.onerror = function () {
+            reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+          };
+
+          formData = new FormData();
+          formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+          xhr.send(formData);
+        });
+      },
+      // End added part for CSRF token
+
       file_picker_callback: function (cb, value, meta) {
         var input = document.createElement('input');
         input.setAttribute('type', 'file');

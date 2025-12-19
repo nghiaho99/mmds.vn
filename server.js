@@ -60,7 +60,7 @@ app.use(session({
 
 // Cấu hình CSRF protection
 const csrfProtection = csurf();
-app.use(csrfProtection);
+app.use(csrfProtection); // Apply csrfProtection globally after session
 
 // Middleware to make CSRF token available in all views
 app.use((req, res, next) => {
