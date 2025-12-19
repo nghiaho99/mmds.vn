@@ -1,38 +1,23 @@
-<!DOCTYPE html>
-<html lang="vi">
+<% block('styles', '<link rel="stylesheet" href="/css/news-content.css">') %>
 
-<%- include('partials/head') %>
-  <link rel="stylesheet" href="/css/news-content.css">
-</head>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+    <li class="breadcrumb-item"><a href="/tin-tuc">Tin tức</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= article.title %></li>
+  </ol>
+</nav>
 
-<body>
-  <%- include('partials/header') %>
-
-  <main class="container mt-5 mb-5">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item"><a href="/tin-tuc">Tin tức</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><%= article.title %></li>
-      </ol>
-    </nav>
-
-    <div class="card mb-4">
-      <div class="card-body">
-        <h1 class="card-title"><%= article.title %></h1>
-        <p class="text-muted small">
-          Tác giả: <%= article.author %> | Đăng ngày: <%= formatDate(article.createdAt) %>
-        </p>
-        <div class="news-article-body">
-          <%- article.content %>
-        </div>
-      </div>
+<div class="card mb-4">
+  <div class="card-body">
+    <h1 class="card-title"><%= article.title %></h1>
+    <p class="text-muted small">
+      Tác giả: <%= article.author %> | Đăng ngày: <%= formatDate(article.createdAt) %>
+    </p>
+    <div class="news-article-body">
+      <%- article.content %>
     </div>
-    
-    <a href="/tin-tuc" class="btn btn-primary">Quay lại tin tức</a>
-  </main>
+  </div>
+</div>
 
-  <%- include('partials/footer') %>
-</body>
-
-</html>
+<a href="/tin-tuc" class="btn btn-primary">Quay lại tin tức</a>

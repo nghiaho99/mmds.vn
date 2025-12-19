@@ -1,61 +1,50 @@
-<!DOCTYPE html>
-<html lang="vi">
-<%- include('partials/head') %>
-
-<body>
-    <%- include('partials/header') %>
-
-    <section class="section section-news">
-        <div class="container">
-            <h1 class="page-title">TIN TỨC</h1>
-            <div class="news-search">
-                <form action="/tin-tuc" method="GET">
-                    <input type="text" name="search" placeholder="Tìm kiếm bài viết..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
-                    <button type="submit">Tìm kiếm</button>
-                </form>
-            </div>
-            <div class="news-list">
-                <% if (newsArticles.length === 0) { %>
-                    <p>Không tìm thấy bài viết nào phù hợp.</p>
-                <% } else { %>
-                    <% newsArticles.forEach(function(article) { %>
-                    <div class="news-list-item">
-                        <a href="/tin-tuc/<%= article.articleLink %>" class="news-list-item-image">
-                            <img src="<%= article.imageSrc && article.imageSrc !== '' ? article.imageSrc : '/images/placeholder.jpg' %>" alt="<%= article.altText %>" width="300" height="200">
-                            <!-- TODO: Replace width and height with actual image dimensions from backend for optimal CLS -->
-                        </a>
-                        <div class="news-list-item-content">
-                            <h2 class="news-list-item-title"><a href="/tin-tuc/<%= article.articleLink %>"><%= article.title %></a></h2>
-                            <p class="news-list-item-meta">
-                                <span><i class="fa-solid fa-user"></i> Tác giả: <%= article.author %></span>
-                                <span><i class="fa-solid fa-calendar-days"></i> Đăng ngày: <%= formatDate(article.createdAt) %></span>
-                            </p>
-                            <a href="/tin-tuc/<%= article.articleLink %>" class="btn btn-primary news-readmore-btn">Xem thêm</a>
-                        </div>
+<section class="section section-news">
+    <div class="container">
+        <h1 class="page-title">TIN TỨC</h1>
+        <div class="news-search">
+            <form action="/tin-tuc" method="GET">
+                <input type="text" name="search" placeholder="Tìm kiếm bài viết..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+                <button type="submit">Tìm kiếm</button>
+            </form>
+        </div>
+        <div class="news-list">
+            <% if (newsArticles.length === 0) { %>
+                <p>Không tìm thấy bài viết nào phù hợp.</p>
+            <% } else { %>
+                <% newsArticles.forEach(function(article) { %>
+                <div class="news-list-item">
+                    <a href="/tin-tuc/<%= article.articleLink %>" class="news-list-item-image">
+                        <img src="<%= article.imageSrc && article.imageSrc !== '' ? article.imageSrc : '/images/placeholder.jpg' %>" alt="<%= article.altText %>" width="300" height="200">
+                        <!-- TODO: Replace width and height with actual image dimensions from backend for optimal CLS -->
+                    </a>
+                    <div class="news-list-item-content">
+                        <h2 class="news-list-item-title"><a href="/tin-tuc/<%= article.articleLink %>"><%= article.title %></a></h2>
+                        <p class="news-list-item-meta">
+                            <span><i class="fa-solid fa-user"></i> Tác giả: <%= article.author %></span>
+                            <span><i class="fa-solid fa-calendar-days"></i> Đăng ngày: <%= formatDate(article.createdAt) %></span>
+                        </p>
+                        <a href="/tin-tuc/<%= article.articleLink %>" class="btn btn-primary news-readmore-btn">Xem thêm</a>
                     </div>
-                    <% }); %>
-                <% } %>
-            </div>
-
-            <% if (totalPages > 1) { %>
-            <div class="pagination">
-                <% if (currentPage > 1) { %>
-                    <a href="/tin-tuc?page=<%= currentPage - 1 %><% if(searchQuery) { %>&search=<%= searchQuery %><% } %>">&laquo; Trang trước</a>
-                <% } %>
-
-                <% for (let i = 1; i <= totalPages; i++) { %>
-                    <a href="/tin-tuc?page=<%= i %><% if(searchQuery) { %>&search=<%= searchQuery %><% } %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
-                <% } %>
-
-                <% if (currentPage < totalPages) { %>
-                    <a href="/tin-tuc?page=<%= currentPage + 1 %><% if(searchQuery) { %>&search=<%= searchQuery %><% } %>">Trang tiếp &raquo;</a>
-                <% } %>
-            </div>
+                </div>
+                <% }); %>
             <% } %>
         </div>
-    </section>
 
-    <%- include('partials/footer') %>
-</body>
+        <% if (totalPages > 1) { %>
+        <div class="pagination">
+            <% if (currentPage > 1) { %>
+                <a href="/tin-tuc?page=<%= currentPage - 1 %><% if(searchQuery) { %>&search=<%= searchQuery %><% } %>">&laquo; Trang trước</a>
+            <% } %>
 
-</html>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="/tin-tuc?page=<%= i %><% if(searchQuery) { %>&search=<%= searchQuery %><% } %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+                <a href="/tin-tuc?page=<%= currentPage + 1 %><% if(searchQuery) { %>&search=<%= searchQuery %><% } %>">Trang tiếp &raquo;</a>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+</section>
+

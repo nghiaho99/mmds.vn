@@ -1,4 +1,5 @@
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -30,6 +31,10 @@ app.use(
         },
     })
 );
+
+// Use express-ejs-layouts
+app.use(expressLayouts);
+app.set('layout', 'layout'); // not required for simple cases, but good practice
 
 // Thiết lập view engine là EJS
 app.set('view engine', 'ejs');

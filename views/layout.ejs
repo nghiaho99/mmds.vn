@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head') %>
+
+<body>
+    <%- include('partials/header') %>
+
+    <main id="main-content">
+        <%- body %>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <!-- Popup Modal -->
+    <div id="consultation-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>Đăng ký tư vấn</h2>
+                <button class="popup-close" id="popup-close-btn">&times;</button>
+            </div>
+            <p>Vui lòng để lại thông tin, chúng tôi sẽ liên hệ với bạn sớm nhất.</p>
+            <form id="consultation-form">
+                <input type="text" id="popup-name" name="name" placeholder="Họ và tên" required>
+                <input type="tel" id="popup-phone" name="phone" placeholder="Số điện thoại" required>
+                <input type="email" id="popup-email" name="email" placeholder="Email" required>
+                <input type="hidden" id="popup-service" name="service" value="">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit">Gửi thông tin</button>
+                <p id="popup-status" class="popup-status"></p>
+            </form>
+        </div>
+    </div>
+
+    <button id="scrollTopBtn" title="Lên đầu trang"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <script src="/js/main.js"></script>
+    <script>
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        };
+
+        // When the user clicks on the button, scroll to the top of the document
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+</body>
+
+</html>
