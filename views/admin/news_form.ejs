@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-
-<%- include('../partials/head') %>
-
-<body>
-  <%- include('../partials/header') %>
-
-  <main class="container mt-5 mb-5">
+<main class="container mt-5 mb-5">
     <h1><%= typeof article === 'undefined' ? 'Thêm bài viết mới' : 'Sửa bài viết' %></h1>
 
     <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
@@ -137,8 +129,3 @@
       }
     });
   </script>
-
-  <%- include('../partials/footer') %>
-</body>
-
-</html>

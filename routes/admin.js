@@ -38,7 +38,7 @@ const isAuthenticated = (req, res, next) => {
 
 // --- LOGIN ROUTES ---
 router.get('/login', (req, res) => {
-    res.render('admin/login', { error: null });
+    res.render('admin/login', { error: null, layout: false });
 });
 
 router.post('/login', (req, res) => {
@@ -47,7 +47,7 @@ router.post('/login', (req, res) => {
         req.session.user = { username: username };
         res.redirect('/admin/news');
     } else {
-        res.render('admin/login', { error: 'Invalid username or password' });
+        res.render('admin/login', { error: 'Invalid username or password', layout: false });
     }
 });
 
