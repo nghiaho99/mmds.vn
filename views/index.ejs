@@ -206,16 +206,34 @@
                     name="your-email"></span>
               </div>
               <div class="form-selects">
-                <span class="wpcf7-form-control-wrap" data-name="menu-course"><select
-                    class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true"
-                    aria-invalid="false" name="menu-course">
-                    <option value="">Chọn dịch vụ cần tư vấn báo giá</option>
-                    <option value="Dịch vụ xin cấp giấy phép kinh doanh sản phẩm mật mã dân sự">Dịch vụ xin cấp
-                      giấy phép kinh doanh sản phẩm mật mã dân sự</option>
-                    <option value="Dịch vụ xin cấp giấy phép xuất/nhập khẩu sản phẩm mật mã dân sự">Dịch vụ xin
-                      cấp giấy phép xuất/nhập khẩu sản phẩm mật mã dân sự</option>
-                  </select></span>
-              </div>
+  <label for="menu-course" class="sr-only">
+    Chọn dịch vụ cần tư vấn báo giá
+  </label>
+
+  <span class="wpcf7-form-control-wrap" data-name="menu-course">
+    <select
+      id="menu-course"
+      name="menu-course"
+      class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required"
+      aria-required="true"
+      aria-invalid="false">
+      
+      <option value="" disabled selected>
+        Chọn dịch vụ cần tư vấn báo giá
+      </option>
+
+      <option value="Dịch vụ xin cấp giấy phép kinh doanh sản phẩm mật mã dân sự">
+        Dịch vụ xin cấp giấy phép kinh doanh sản phẩm mật mã dân sự
+      </option>
+
+      <option value="Dịch vụ xin cấp giấy phép xuất/nhập khẩu sản phẩm mật mã dân sự">
+        Dịch vụ xin cấp giấy phép xuất/nhập khẩu sản phẩm mật mã dân sự
+      </option>
+
+    </select>
+  </span>
+</div>
+
               <div class="form-mst">
                 <span class="wpcf7-form-control-wrap" data-name="your-mst"><input size="40" maxlength="400"
                     class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Mã số thuế" value=""
